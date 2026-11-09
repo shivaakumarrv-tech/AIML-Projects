@@ -1,21 +1,10 @@
-# Customer Intelligence & Support Copilot — corrected local production kit
+# Customer Intelligence & Support Copilot 
 
 This kit is for **local Windows use**. It sets up a Python virtual environment, installs project and Streamlit dependencies, generates the synthetic CSV datasets and policy documents when needed, and starts the browser walkthrough.
 
-## 1. Important correction for your folder layout
+## 1. Required folder structure
 
-The supplied `generate_data.py` originally used paths relative to whichever folder the command prompt happened to be in, and wrote policy documents only to `data/policies`. The corrected generator now anchors all paths to the folder containing `generate_data.py`, so it works even if launched from another current directory.
-
-It creates:
-
-- CSV data in `data/raw/`: `customers.csv`, `products.csv`, `orders.csv`, `tickets.csv`, and `policy_eval.csv`.
-- Policy text files in **both** `data/policies/` and `notebooks/data/policies/`.
-
-The duplicate policy output is intentional: your existing `src/policy_rag.py` and `src/refund_agent.py` read from `data/policies/`, while the notebook-side folder you requested is also populated. The two locations contain the same generated policy documents.
-
-## 2. Required folder structure
-
-Keep the whole kit together in your project root. Merge it with your existing project; do not copy only `app.py`.
+Keep the whole kit together in your project root. 
 
 ```text
 Customer_Intelligence_Support_Copilot/
@@ -45,9 +34,8 @@ Customer_Intelligence_Support_Copilot/
 └── state/                          # created by refund workflow
 ```
 
-The kit includes the uploaded `generate_data.py`, `mock_llm.py`, and original `requirements.txt`, along with the supplied project modules. Preserve any additional files your original project needs.
 
-## 3. One-click startup
+## 2. One-click startup
 
 1. Install Python 3.10+ on Windows and enable **Add Python to PATH** during installation.
 2. Extract/merge this folder into the project root.
@@ -58,27 +46,7 @@ The kit includes the uploaded `generate_data.py`, `mock_llm.py`, and original `r
 
 Subsequent launches reuse `.venv` and skip data generation if all expected raw CSV files and policy files exist. To recreate the sample data intentionally, remove the generated CSVs and policy `.txt` files first, then run the batch file again, or use the app's Generate sample data button.
 
-## 4. Why you saw PermissionError on orders.csv
-
-The generator opens `data/raw/orders.csv` in write mode because it recreates the synthetic dataset. Windows can deny this if:
-
-- `orders.csv` is open in Excel, Notepad, a CSV previewer, or another process;
-- the file has the Windows **Read-only** attribute;
-- the project folder is under a protected location or your account lacks Modify permission;
-- `orders.csv` is actually a folder, not a file;
-- antivirus, sync software, or backup software temporarily locks the file.
-
-Before retrying:
-
-1. Close Excel and any program that may have `orders.csv` open.
-2. In File Explorer, right-click `data/raw/orders.csv` → Properties → clear **Read-only** if selected.
-3. Ensure your Windows account has Modify permission on the project folder. Prefer a writable location such as `D:\AI\Projects\Customer_Intelligence_Support_Copilot` rather than `Program Files`.
-4. Check that `data/raw/orders.csv` is a file, not a directory.
-5. Double-click `START_PROJECT.bat` again.
-
-The batch file attempts to clear the read-only attribute on generated CSV and policy files. It cannot unlock a file that another program currently holds open. The updated generator prints a more helpful error naming the exact file and suggesting these checks.
-
-## 5. Browser walkthrough
+## 3. Browser walkthrough
 
 Use the sidebar in the browser. Recommended order:
 
@@ -95,15 +63,13 @@ Use the sidebar in the browser. Recommended order:
 
 Each stage is started with its on-screen button. Run the stages in order because later stages depend on data created by earlier ones.
 
-## 6. Are app.py and requirements_frontend.txt alone enough?
-
-No. They are the UI and its extra dependencies, not the full application. You also need `src/`, `generate_data.py`, `mock_llm.py`, the original `requirements.txt`, and any other original project assets. This kit includes those uploaded files and a Windows startup script.
-
-## 7. Local vs public deployment
+## 4. Local vs public deployment
 
 `localhost:8501` is available only on the computer running Streamlit. This batch file is not a public internet deployment. For a shared/public production deployment, configure a server or managed hosting, authentication, authorization, secrets, network controls, data retention and backups before using real customer data.
 
-## 8. Troubleshooting
+## 5. Troubleshooting
+
+Included basic troubleshooting steps when encounter durinig deployment
 
 - **Python not found:** install Python 3.10+ and add it to PATH.
 - **PermissionError for orders.csv:** close programs using the file, clear Read-only, verify folder Modify permission, and retry.
