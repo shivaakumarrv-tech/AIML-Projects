@@ -69,7 +69,7 @@ Each stage is started with its on-screen button. Run the stages in order because
 
 ## 5. Troubleshooting
 
-Included basic troubleshooting steps when encounter durinig deployment
+Included basic troubleshooting steps durinig deployment
 
 - **Python not found:** install Python 3.10+ and add it to PATH.
 - **PermissionError for orders.csv:** close programs using the file, clear Read-only, verify folder Modify permission, and retry.
